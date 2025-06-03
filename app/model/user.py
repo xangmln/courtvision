@@ -17,7 +17,8 @@ class User(AbstractBaseModel):
     role : Mapped[str] = mapped_column(SQLAlchemyEnum(RoleEnum),default=RoleEnum.user)
 
     reservation = relationship("Reservation",back_populates="user")
-
+    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
+    
     def __str__(self) -> str:
         return self.username
 
