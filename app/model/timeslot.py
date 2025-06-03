@@ -8,7 +8,7 @@ class TimeSlot(Base):
     id : Mapped[int] = mapped_column(primary_key=True)
     start_time : Mapped[time] = mapped_column(nullable=False)
     end_time : Mapped[time] = mapped_column(nullable=False)
-    date : Mapped[date] = mapped_column(nullable=False)
+    reservation_date : Mapped[date] = mapped_column(nullable=False)
     court_id : Mapped[int] = mapped_column(ForeignKey('court.id'))
     reservation_id : Mapped[int] = mapped_column(ForeignKey('reservation.id'))
 

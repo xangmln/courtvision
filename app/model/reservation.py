@@ -1,11 +1,12 @@
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import ForeignKey
-from app.utils.database import Base
+
+from app.model.abstract import AbstractBaseModel
+
 from datetime import date
 
-class Reservation(Base):
+class Reservation(AbstractBaseModel):
     __tablename__ = 'reservation'
-    id : Mapped[int] = mapped_column(primary_key=True)
     user_id : Mapped[int] = mapped_column(ForeignKey('user.id'))
     court_id : Mapped[int] = mapped_column(ForeignKey('court.id'))
     timeslot_id : Mapped[int] = mapped_column(ForeignKey('timeslot.id'))
