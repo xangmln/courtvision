@@ -7,11 +7,9 @@ from datetime import date
 
 class Reservation(AbstractBaseModel):
     __tablename__ = 'reservation'
-    user_id : Mapped[int] = mapped_column(ForeignKey('user.id'))
-    court_id : Mapped[int] = mapped_column(ForeignKey('court.id'))
-    timeslot_id : Mapped[int] = mapped_column(ForeignKey('timeslot.id'))
-    member : Mapped[int] = mapped_column(default=1)
+    user_id : Mapped[str] = mapped_column(ForeignKey('user.id'))
+    timeslot_id : Mapped[str] = mapped_column(ForeignKey('timeslot.id'))
+    member : Mapped[str] = mapped_column(default=1)
 
-    user = relationship('User', back_populates='reservation')
-    court = relationship('Court', back_populates='reservation')
+    user = relationship('User', back_populates='reservations')
     timeslot = relationship('Timeslot', back_populates='reservation')

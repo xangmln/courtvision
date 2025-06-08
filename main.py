@@ -11,7 +11,7 @@ from app.routers import route
 
 from app.response.error_response import ValidationErrorResponse,ErrorResponse
 from app.response.success_response import success_response
-
+from app.model import *
 load_dotenv()
 
 # create database tables

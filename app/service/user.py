@@ -40,7 +40,7 @@ class UserService:
         user = User(**user.model_dump())
         db.add(user)
         db.commit()
-        db.refresh()
+        db.refresh(user)
 
         notification = Notification(
             user_id=user.id, message="Account created successfully"
@@ -62,10 +62,52 @@ class UserService:
         }
 
         return response
+    
+    def handle_login(self,db : db_dependency, email: str, password : str):
+        user = self.get_user_by_email(db,email)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="no account with this email"
+            )
+        if not self.verify_password(db,password, user.password):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                detail="Incorrect password"
+            )
+        
+
+        access_token, expiry = self.create_access_token(db, user).values()
+
+        
+        db.commit()
+        db.refresh(user)
+
+        # create notification
+
+        notification = Notification(user_id=user.id, message="Account Login successful")
+
+        db.add(notification)
+        db.commit()
+
+        user = jsonable_encoder(
+            self.get_user_detail(db=db, user_id=user.id), exclude={"password"}
+        )
+
+        response = {
+            "access_token": access_token,
+            "expiry": expiry,
+            "user": user,
+        }
+
+        return response
 
 
     def hashed_password(self, password: str) -> str:
         return bcrypt_context.hash(password)
+    def verify_password(self, db: db_dependency, password: str, hashed_password) -> bool:
+        return bcrypt_context.verify(password,hashed_password)
+
     
     def exists(self, email: str, db: db_dependency) -> bool:
         user = db.query(User).filter(User.email == email).first()
@@ -74,7 +116,8 @@ class UserService:
             return True
 
         return False
-
+    
+    
 
     def create_access_token(self, db : db_dependency, user : User) -> dict:
         payload = {
