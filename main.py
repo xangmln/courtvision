@@ -16,7 +16,7 @@ load_dotenv()
 
 # create database tables
 
-Base.metadata.create(bind=engine)
+Base.metadata.create_all(engine)
 
 app = FastAPI()
 
