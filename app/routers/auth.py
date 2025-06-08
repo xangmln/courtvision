@@ -12,3 +12,9 @@ auth = APIRouter(prefix="/auth", tags = ["auth"])
 @auth.post("/register",status_code=status.HTTP_201_CREATED)
 async def user_register(user: UserCreate, db : Session = Depends(get_db)):
     data = user_service.create_user(user,db)
+
+    return success_response(
+        status_code=status.HTTP_201_CREATED,
+        message="User created successfully",
+        data=data
+    )
