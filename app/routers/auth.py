@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
+
 from app.response.success_response import success_response
 from app.utils.dependencies import get_db
 from app.service.user import user_service
@@ -38,3 +39,4 @@ async def logout(
 ):
     user_service.blacklist_token(db, current_user)
     return success_response(message="User logged out successfully")
+
