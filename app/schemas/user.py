@@ -20,12 +20,13 @@ class UserLogin(BaseModel):
     password: str
 
 class UserCreateResponse(BaseModel):
-    id: int
+    id: str
     username: str
     email: EmailStr
     access_token: str
     expiry: datetime
 
 class UserResponse(BaseModel):
-    id: int
+    id: str
     username: str
+    email: EmailStr

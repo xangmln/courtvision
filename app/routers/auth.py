@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-
+from fastapi.security import OAuth2PasswordBearer
 
 from app.response.success_response import success_response
 from app.utils.dependencies import get_db
