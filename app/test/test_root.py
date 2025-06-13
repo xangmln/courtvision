@@ -17,7 +17,7 @@ def test_server_root():
     assert response.status_code == 200
     assert response.json() == {
         "status_code": 200,
-        "message": "Welcome to CourtVision",
+        "message": "welcome to courtvision",
     }
 
 
@@ -25,11 +25,11 @@ def test_404_not_found_error():
     response = client.get("/zzz")
 
     assert response.status_code == 404
-    assert response.json() == {"status_code": 404, "message": "Not Found"}
+    assert response.json() == {"status_code":404,"message": "Not Found"}
 
 
 def test_other_error_response():
     response = client.post("/")
 
     assert response.status_code == 405
-    assert response.json() == {"status_code": 405, "message": "Method Not Allowed"}
+    assert response.json() == {"status_code":405,"message": "Method Not Allowed"}
