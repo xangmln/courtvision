@@ -6,6 +6,16 @@ from app.model.user import User
 from app.service.user import user_service
 from main import app
 
+@pytest.fixture
+def mock_get_users():
+    with patch("app.service.user.user_service.fetch_all") as fetch_users:
+        fetch_users.return_value = [
+            {"id": 1, "username": "sam"},
+            {"id": 2, "username": "test"},
+            {"id": 3, "username": "john"},
+        ]
+
+        yield fetch_users
 
 @pytest.fixture
 def mock_user_detail():

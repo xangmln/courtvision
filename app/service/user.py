@@ -10,6 +10,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from passlib.context import CryptContext
 from jose import jwt,JWTError
+from sqlalchemy import or_, text
 from sqlalchemy.orm import Session
 
 load_dotenv()
@@ -207,5 +208,22 @@ class UserService:
 
         db.delete(user)
         db.commit()
+    
+    def fetch_all(self, db: Session, search: str = ""):
+        query = (
+            db.query(User).order_by(text("RANDOM()"))
+        )
+
+        if search:
+            query = query.filter(
+                or_(
+                    User.username.icontains(f"%{search}%"),
+                    User.email.icontains(f"%{search}%"),
+                )
+            )
+
+        users = query.all()
+
+        return jsonable_encoder(users, exclude={"password"})
 
 user_service = UserService()

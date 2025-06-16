@@ -12,7 +12,19 @@ user = APIRouter(prefix="/user",tags=["user"])
 
 db_dependency = Annotated[Session,Depends(get_db)]
 
-@user.get("/" ,status_code=status.HTTP_200_OK)
+@user.get("/", summary="Get list of users")
+async def get_users(search: str = "", db: Session = Depends(get_db)):
+    users = user_service.fetch_all(db=db, search=search)
+
+    return success_response(
+        status_code=status.HTTP_200_OK,
+        message="User list fetched successfully",
+        data=users,
+    )
+
+
+
+@user.get("/{id}" ,status_code=status.HTTP_200_OK)
 async def get_user_profile(
     user: User = Depends(user_service.get_current_user),
     db: Session = Depends(get_db),
