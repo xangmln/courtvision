@@ -40,9 +40,9 @@ def test_register_court_success(
 def test_register_validation_error(
     mock_db_session: Session, mock_court_service: CourtService, override_court_create: None
 ):
-    data = {"name": "testCourt"}
+    data = {"name": "testCourt",}
 
-    response = client.post("auth/register", json=data)
+    response = client.post("court/register", json=data)
 
     assert response.status_code == 422
     assert response.json() == {

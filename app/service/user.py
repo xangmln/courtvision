@@ -196,14 +196,16 @@ class UserService:
     def get_user_by_id(self, db: db_dependency, id : str) -> User | None:
         return db.query(User).filter(User.id == id).first() or None
     
-    def delete_user(self, db : db_dependency, user_id : str):
-        user_delete = db.query(User).filter(User.id==user_id).first()
-        if not user_delete:
+    def delete_user_profile(self, db: Session, user: User, user_id: str):
+        # check if user is the currently logged in user
+
+        if user.id != user_id:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            ) 
-        db.delete(user_delete)
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to delete this user",
+            )
+
+        db.delete(user)
         db.commit()
-        return {"message" : "User Deleted"}
 
 user_service = UserService()
