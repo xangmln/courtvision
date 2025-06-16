@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List,Optional
 from uuid import UUID
 
 class CourtBase(BaseModel):
@@ -7,4 +7,4 @@ class CourtBase(BaseModel):
     location : str
 
 class CourtResponse(CourtBase):
-    timeslot_id : List[UUID]
+    timeslot_id : Optional[List[UUID]] = None
