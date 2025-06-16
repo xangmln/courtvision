@@ -1,4 +1,6 @@
-from fastapi import Depends, APIRouter, HTTPException, status
+from __future__ import annotations
+
+from fastapi import Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from typing import Annotated
 from sqlalchemy.orm import Session
