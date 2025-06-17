@@ -109,6 +109,31 @@ class UserService:
         return bcrypt_context.hash(password)
     def verify_password(self, db: db_dependency, password: str, hashed_password) -> bool:
         return bcrypt_context.verify(password,hashed_password)
+    
+
+    def change_password(self, db: db_dependency,id:str, password: str, hashed_password, change_password: str):
+        user = user_service.get_user_by_id(db,id)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="no account with this email"
+            )
+        if not self.verify_password(db,password, user.password):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                detail="Incorrect password"
+            )
+        user.password = user_service.hashed_password(change_password)
+        db.commit()
+        db.refresh(user)
+
+        response = {
+            "before" : password,
+            "after" : change_password
+        }
+        return response
+        
+    
 
     
     def exists(self, email: str, db: db_dependency) -> bool:

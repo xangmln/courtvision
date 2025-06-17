@@ -34,4 +34,6 @@ class UserResponse(BaseModel):
 class UserUpdate(BaseModel):
     username: Optional[str] = None
     email: Optional[EmailStr] = None
-    
+
+class UserPassword(BaseModel):
+    password: str

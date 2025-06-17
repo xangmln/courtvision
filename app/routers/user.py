@@ -5,7 +5,7 @@ from typing import Annotated
 from app.response.success_response import success_response
 from app.utils.dependencies import get_db
 from app.service.user import user_service
-from app.schemas.user import UserResponse, UserLogin, UserUpdate
+from app.schemas.user import UserResponse, UserLogin, UserUpdate, UserPassword
 from app.model.user import User
 
 user = APIRouter(prefix="/user",tags=["user"])
@@ -53,3 +53,7 @@ async def update_user_profile(
     data = user_service.update_user_profile(db=db, user=user, user_id=id, schema=body)
 
     return success_response(message="User updated successfully", data=data)
+
+@user.patch("/{id}/password")
+async def change_password(password:str,body: UserPassword,user: User= Depends(user_service.get_current_user), db: Session = Depends(get_db)):
+    
