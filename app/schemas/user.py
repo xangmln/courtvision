@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel, Field, EmailStr
-from typing import Literal
+from typing import Literal,Optional
 
 from app.model.user import RoleEnum
 
@@ -30,3 +30,8 @@ class UserResponse(BaseModel):
     id: str
     username: str
     email: EmailStr
+
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    

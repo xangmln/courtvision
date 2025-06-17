@@ -20,3 +20,4 @@ async def court_register(court : CourtBase ,db : db_dependency):
         message="Court created successfully",
         data=data
     )
+

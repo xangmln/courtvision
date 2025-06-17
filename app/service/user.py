@@ -19,7 +19,7 @@ from app.model.user import User
 from app.model.access_token import AccessToken
 from app.model.notification import Notification
 from app.utils.dependencies import get_db
-from app.schemas.user import UserCreate, UserLogin
+from app.schemas.user import UserCreate, UserUpdate
 from app.schemas.token import Token
 
 
@@ -208,7 +208,7 @@ class UserService:
 
         db.delete(user)
         db.commit()
-    
+   
     def fetch_all(self, db: Session, search: str = ""):
         query = (
             db.query(User).order_by(text("RANDOM()"))
@@ -225,5 +225,35 @@ class UserService:
         users = query.all()
 
         return jsonable_encoder(users, exclude={"password"})
+    
+    def update_user_profile(self, db: Session,user: User, user_id: str, schema : UserUpdate):
+        # verify that user is the one logged in
+
+        if user.id != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to update this user",
+            )
+        
+        data = schema.model_dump(exclude_unset=True)
+        for key, value in data.items():
+            setattr(user, key, value)
+
+        db.commit()
+        db.refresh(user)
+
+        notification = Notification(
+            user_id=user.id, message="Account updated successfully"
+        )
+
+        db.add(notification)
+        db.commit()
+
+        # return user detail
+
+        return jsonable_encoder(
+            self.get_user_detail(db=db, user_id=user_id), exclude={"password"}
+        )
+
 
 user_service = UserService()
