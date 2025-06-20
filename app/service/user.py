@@ -111,12 +111,11 @@ class UserService:
         return bcrypt_context.verify(password,hashed_password)
     
 
-    def change_password(self, db: db_dependency,email:str, password: str, changed_password: str):
-        user = user_service.get_user_by_email(db,email)
-        if not user:
+    def change_password(self, db: db_dependency,user_id:str,user: User, password: str, changed_password: str):
+        if user.id != user_id:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="no account with this email"
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have permission to update this user",
             )
         if not self.verify_password(password, user.password):
             raise HTTPException(

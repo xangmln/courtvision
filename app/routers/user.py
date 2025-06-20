@@ -54,8 +54,8 @@ async def update_user_profile(
 
     return success_response(message="User updated successfully", data=data)
 
-@user.patch("/password")
-async def change_password(body: UserPassword,user: User= Depends(user_service.get_current_user), db: Session = Depends(get_db)):
-    data = user_service.change_password(db,user.email,body.password,body.new_password)
+@user.patch("/{id}/password")
+async def change_password(id: str,body: UserPassword,user: User= Depends(user_service.get_current_user), db: Session = Depends(get_db)):
+    data = user_service.change_password(db,id,user,body.password,body.new_password)
 
-    return success_response(message="User password changed successfully", data=data)
+    return success_response(message="User password changed successfully")

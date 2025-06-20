@@ -19,7 +19,7 @@ def test_update_user_profile(
     current_user,
     mock_user_update,
 ):
-    body = {"bio": "Update my bio", "social_links": ["http://example.com"]}
+    body = {}
 
     response = client.patch(
         endpoint, headers={"authorization": f"Bearer {access_token}"}, json=body

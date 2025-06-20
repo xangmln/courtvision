@@ -88,7 +88,7 @@ def mock_invalid_account_effect():
 @pytest.fixture
 def mock_incorrect_password():
     with patch(
-        "app.service.user.user_service.handle_login"
+        "app.service.user.UserService.verify_password"
     ) as incorrect_password:
         incorrect_password.side_effect = HTTPException(400, "Incorrect password")
 

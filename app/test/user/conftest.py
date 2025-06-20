@@ -90,10 +90,12 @@ def mock_wrong_password_effect():
 
 
 @pytest.fixture
-def mock_no_account_effect():
-    with patch("app.service.user.user_service.change_password") as no_account:
-        no_account.side_effect = HTTPException(
-            400, detail="No account with this email"
+def mock_change_password_effect():
+    with patch(
+        "app.service.user.user_service.change_password"
+    ) as user_detail_effect:
+        user_detail_effect.side_effect = HTTPException(
+            403, "You do not have permission to update this profile"
         )
 
-        yield no_account
+        yield user_detail_effect
