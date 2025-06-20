@@ -85,8 +85,10 @@ def mock_wrong_password_effect():
         "app.service.user.user_service.change_password"
     ) as wrong_password_effect:
         wrong_password_effect.side_effect = HTTPException(
-            400, "Incorrect password"
+            400, "Incorrect Password"
         )
+
+        yield wrong_password_effect
 
 
 @pytest.fixture
