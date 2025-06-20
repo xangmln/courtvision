@@ -126,11 +126,6 @@ class UserService:
         user.password = user_service.hashed_password(changed_password)
         db.commit()
         db.refresh(user)
-
-        response = {
-            "message" : "password change successfully"
-        }
-        return response
         
     
 

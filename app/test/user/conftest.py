@@ -70,3 +70,30 @@ def mock_user_update_effect():
         )
 
         yield user_detail_effect
+
+@pytest.fixture
+def mock_change_password():
+    with patch(
+        "app.service.user.user_service.change_password"
+    ) as change_password:
+        yield change_password
+
+
+@pytest.fixture
+def mock_wrong_password_effect():
+    with patch(
+        "app.service.user.user_service.change_password"
+    ) as wrong_password_effect:
+        wrong_password_effect.side_effect = HTTPException(
+            400, "Incorrect password"
+        )
+
+
+@pytest.fixture
+def mock_no_account_effect():
+    with patch("app.service.user.user_service.change_password") as no_account:
+        no_account.side_effect = HTTPException(
+            400, detail="No account with this email"
+        )
+
+        yield no_account
