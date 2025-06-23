@@ -19,7 +19,7 @@ def test_change_password(
     mock_change_password,
 ):
     body = {
-        "password": "test1234",
+        "password": "test0000",
         "new_password": "test5678"
     }
 

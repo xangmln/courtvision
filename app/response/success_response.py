@@ -22,3 +22,10 @@ def success_response(message: str, status_code: int = status.HTTP_200_OK, data: 
         response["data"] = data
 
     return JSONResponse(status_code=status_code, content=jsonable_encoder(response))
+
+def token_response(token: str):
+    response = {
+        "access_token": token,
+        "type": "bearer"
+    }
+    return response
