@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, status, Security
 from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordRequestForm
+
+from typing import Annotated
 
 from app.response.success_response import success_response,token_response
 from app.utils.dependencies import get_db
@@ -34,8 +36,8 @@ async def login(data: UserLogin, db: Session = Depends(get_db)):
     ) 
 
 @auth.post("/swagger", status_code=status.HTTP_200_OK)
-async def swagger_login(data: UserLogin, db: Session = Depends(get_db)):
-    data = user_service.handle_login(db, email=data.email,password=data.password)
+async def swagger_login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
+    data = user_service.handle_login(db, email=form_data.username,password=form_data.password)
     token = data["access_token"]
     response = {
         "access_token": token,
