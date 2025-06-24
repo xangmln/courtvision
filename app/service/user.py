@@ -34,7 +34,7 @@ db_dependency = Annotated[Session,Depends(get_db)]
 class UserService:
     def create_user(self, user: UserCreate, db : db_dependency):
         # 이미 등록된 계정인지 확인
-        if self.exists(user.email,db):
+        if self.exists(db, user.email):
             raise HTTPException(status.HTTP_400_BAD_REQUEST,"User with email already exist")
         
         hashed_password = self.hashed_password(user.password)
@@ -129,7 +129,7 @@ class UserService:
     
 
     
-    def exists(self, email: str, db: db_dependency) -> bool:
+    def exists(self, db: db_dependency, email: str) -> bool:
         user = db.query(User).filter(User.email == email).first()
 
         if user:
@@ -176,7 +176,7 @@ class UserService:
         if access_token and access_token.blacklisted:
             raise auth_exception
 
-        user = self.get_user_by_email(email, db)
+        user = self.get_user_by_email(db, email)
 
         if not user:
             raise auth_exception
@@ -200,17 +200,16 @@ class UserService:
 
     
     def get_user_detail(self, db : db_dependency, user_id : str):
-        query = db.query(User).filter(User.id==user_id).first()
-        if not query:
+        data = db.query(User).filter(User.id==user_id).first()
+        if not data:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             ) 
-        return query
+        return data
         
 
     def get_user_by_email(self, db: db_dependency, email: str) -> User | None:
-        if self.exists(email, db):
-            return db.query(User).filter(User.email == email).first()
+        return db.query(User).filter(User.email == email).first() or None
 
     def get_user_by_id(self, db: db_dependency, id : str) -> User | None:
         return db.query(User).filter(User.id == id).first() or None

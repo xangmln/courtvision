@@ -24,7 +24,7 @@ async def get_users(search: str = "", db: Session = Depends(get_db)):
 
 
 
-@user.get("/{id}" ,status_code=status.HTTP_200_OK)
+@user.get("/me" ,status_code=status.HTTP_200_OK)
 async def get_user_profile(
     user: User = Depends(user_service.get_current_user),
     db: Session = Depends(get_db),
