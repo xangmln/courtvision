@@ -108,4 +108,6 @@ async def http_exception_handler(request: Request, exc: FastAPIError):
 async def index():
     return success_response(message = "welcome to courtvision")
 
-
+@app.get("/sam")
+async def sam():
+    return success_response(message = "it's sangmin's first own project")
